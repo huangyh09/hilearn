@@ -1,0 +1,6 @@
+{
+  "name": "Hilearn",
+  "tagline": "A small library of machine learning methods",
+  "body": "HiLearn\r\n=======\r\n\r\nA small library of machine learning methods. As most of them are often used (by myself), they are standardized and collected here.\r\n\r\n\r\nWhat's inside?\r\n---------------\r\n\r\n* a wrap of cross-validation for regression and classification models.\r\n\r\n* a mixture of linear regression model\r\n\r\n* a plot function to show correlation between a pair of data\r\n\r\n\r\nHow to install?\r\n---------------\r\n\r\nDownload the codes from this github repository and then run the following command line:\r\n\r\n::\r\n\r\n    python setup.py install\r\n\r\nIf you don't have the root permission, add ``--user``.\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
