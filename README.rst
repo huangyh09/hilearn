@@ -11,7 +11,9 @@ What's inside?
 
 * a mixture of linear regression model
 
-* a plot function to show correlation between a pair of data
+* a plot function to show correlation between a pair of data (for regression)
+
+* a plot function to show ROC curve with AUC score (for classification)
 
 
 How to install?
@@ -24,3 +26,7 @@ Download the codes from this github repository and then run the following comman
     python setup.py install
 
 If you don't have the root permission, add ``--user``.
+
+See the tutorial_ for how to use.
+
+.. _tutorial: https://github.com/huangyh09/hilearn/tree/master/tutorial

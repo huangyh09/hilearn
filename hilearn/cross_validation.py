@@ -40,65 +40,34 @@ class CrossValidation:
         For classification, make sure the input model has the following 
         functions: fit, predict and predict_proba.
         """
+        cc = np.unique(self.Y)
         self.Ystate = np.zeros(self.Y.shape[0])
-        self.Yscore = np.zeros(self.Y.shape[0])
-        idx0 = np.where(self.Y == 0)[0]
-        idx1 = np.where(self.Y == 1)[0]
-        if shuffle:
-            np.random.shuffle(idx0)
-            np.random.shuffle(idx1)
-        fold_len0 = int(idx0.shape[0]/folds)
-        fold_len1 = int(idx1.shape[0]/folds)
+        self.Yscore = np.zeros((self.Y.shape[0], len(cc)))
+        idx_all = []
+        fd_lens = []
+        for i in range(len(cc)):
+            _idx = np.where(self.Y == cc[i])[0]
+            if shuffle: np.random.shuffle(_idx)
+            idx_all.append(_idx)
+            fd_lens.append(int(len(_idx)/folds))
         
         for i in range(folds):
-            if i < folds - 1:
-                _idx0 = idx0[i*fold_len0: (i+1)*fold_len0]
-                _idx1 = idx1[i*fold_len1: (i+1)*fold_len1]
-            else:
-                _idx0 = idx0[i*fold_len0:]
-                _idx1 = idx1[i*fold_len1:]
-            _idx = np.append(_idx0, _idx1)
-            Xtest = self.X[_idx, :]
-            Xtrain = np.delete(self.X, _idx, 0)
-            Ytrain = np.delete(self.Y, _idx)
+            idx_use = np.array([], "int")
+            for j in range(len(cc)):
+                if i < folds-1:
+                    _idx = idx_all[j][i*fd_lens[j]: (i+1)*fd_lens[j]]
+                else:
+                    _idx = idx_all[j][i*fd_lens[j]:]
+                idx_use = np.append(idx_use, _idx)
+                    
+            Xtest = self.X[idx_use, :]
+            Xtrain = np.delete(self.X, idx_use, 0)
+            Ytrain = np.delete(self.Y, idx_use)
             
             model.fit(Xtrain, Ytrain)
-            self.Ystate[_idx] = model.predict(Xtest)
-            self.Yscore[_idx] = model.predict_proba(Xtest)
+            self.Ystate[idx_use] = model.predict(Xtest)
+            model.fit(Xtrain, Ytrain)
+            self.Yscore[idx_use,:] = model.predict_proba(Xtest)
         return self.Ystate, self.Yscore
-
-
-    def plot_cv_regression(max_num=10000, outlier=0.01, line_on=True,
-        extra_on=True):
-        x, y = self.Y, self.Y_pre
-        score = st.pearsonr(x, y)[0]
-        np.random.seed(0)
-        if len(x) > max_num:
-            idx = np.random.permutation(len(x))[:max_num]
-            x, y = x[idx], y[idx]
-        outlier = int(len(x) * outlier)
-        
-        xy = np.vstack([x,y])
-        z = st.gaussian_kde(xy)(xy)
-        idx = z.argsort()
-        idx1, idx2 = idx[outlier:], idx[:outlier]
-        pl.set_cmap('Blues')
-        pl.scatter(x[idx1], y[idx1], c=np.log(z[idx1]*9+1), edgecolor='', s=10)
-        pl.scatter(x[idx2], y[idx2], c="k", edgecolor='', s=10, alpha=0.7)
-        pl.grid(alpha=0.3)
-
-        if line_on:
-            clf = linear_model.LinearRegression()
-            clf.fit(x.reshape(-1,1), y)
-            xx = np.linspace(x.min(), x.max(), 1000).reshape(-1,1)
-            yy = clf.predict(xx)
-            pl.plot(xx, yy, "k--", label="R=%.3f" %score)
-
-        if extra_on:
-            pl.ylabel("predicted Y")
-            pl.xlabel("observed Y")
-            pl.xlim(x.min(),x.max())
-            pl.ylim(y.min(),y.max())
-            pl.legend(loc=2, fancybox=True, ncol=1)
 
             
