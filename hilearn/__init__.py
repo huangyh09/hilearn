@@ -5,8 +5,9 @@
 __version__ = "0.0.1"
 
 
-from .plot.corr_plot import corr_plot, ROC_plot
+from .base import id_mapping
 from .cross_validation import CrossValidation
+from .plot.corr_plot import corr_plot, ROC_plot, PR_curve
 from .mixture_model.mix_linear_regression import MixLinearRegression
 
 
