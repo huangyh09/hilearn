@@ -15,6 +15,8 @@ What's inside?
 
 * a plot function to show ROC curve with AUC score (for classification)
 
+* a few plot functions, e.g., set colors, group boxplots, venn3 plots.
+
 
 How to install?
 ---------------
