@@ -29,6 +29,15 @@ Download the codes from this github repository and then run the following comman
 
 If you don't have the root permission, add ``--user``.
 
-See the tutorial_ for how to use.
+
+Tutorial and Gallery
+--------------------
+
+See the tutorial_ for how to use, e.g., `cross-validation functions and plots`_ and `hilearn plot`_.
+
 
 .. _tutorial: https://github.com/huangyh09/hilearn/tree/master/tutorial
+
+.. _`cross-validation functions and plots`: https://github.com/huangyh09/hilearn/blob/master/tutorial/tutorial_cross-validation.rst
+
+.. _`hilearn plot`: https://github.com/huangyh09/hilearn/blob/master/tutorial/tutorial_plots.rst
