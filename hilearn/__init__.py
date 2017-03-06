@@ -6,6 +6,7 @@ __version__ = "0.0.1"
 
 
 from .base import id_mapping
+from .stats import permutation_test
 from .cross_validation import CrossValidation
 from .plot.base_plot import boxgroup, venn3_plot
 from .plot.corr_plot import corr_plot, ROC_plot, PR_curve

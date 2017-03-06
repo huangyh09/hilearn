@@ -4,7 +4,8 @@ import scipy.stats as st
 from sklearn import linear_model
 
 def corr_plot(x, y, max_num=10000, outlier=0.05, line_on=True,
-    corr_on=True, size=30, dot_color=None, outlier_color="r"): #"deepskyblue"
+              corr_on=True, size=30, dot_color=None, outlier_color="r",
+              alpha=0.8): #"deepskyblue"
     score = st.pearsonr(x, y)
     np.random.seed(0)
     if len(x) > max_num:
@@ -20,12 +21,12 @@ def corr_plot(x, y, max_num=10000, outlier=0.05, line_on=True,
     if dot_color is None: 
         c_score = np.log2(z[idx]+100)
     else:
-        idx2 = []
+        #idx2 = []
         c_score = dot_color
     
     pl.set_cmap("Blues")
-    pl.scatter(x[idx], y[idx], c=c_score, edgecolor='', s=size)
-    pl.scatter(x[idx2], y[idx2], c=outlier_color, edgecolor='', s=size/5, alpha=0.5)
+    pl.scatter(x[idx], y[idx], c=c_score, edgecolor='', s=size, alpha=alpha)
+    pl.scatter(x[idx2], y[idx2], c=outlier_color, edgecolor='', s=size/5, alpha=alpha/3.0)#/5
     pl.grid(alpha=0.3)
 
     if line_on:
@@ -99,7 +100,7 @@ def ROC_plot(state, scores, threshold=None, color=None, legend_on=True, label="p
         if color is None:
             pl.plot(_fpr, _tpr, marker='o', markersize=8, mfc='none')
         else:
-            pl.plot(_fpr, _tpr, marker='o', markersize=8, mec=color, mfc='none') 
+            pl.plot(_fpr, _tpr, marker='o', markersize=8, mec=color, mfc=color) 
     else:
         thresholds = np.sort(score_gap)
     #thresholds = np.arange(np.min(threshold), 1+2*threshold, threshold)
@@ -131,8 +132,8 @@ def ROC_plot(state, scores, threshold=None, color=None, legend_on=True, label="p
     return fpr, tpr, thresholds, auc
 
 
-def PR_curve(state, scores, threshold=None, color=None, legend_on=True, label="predict", 
-             base_line=False, linewidth=1.0):
+def PR_curve(state, scores, threshold=None, color=None, legend_on=True,  
+             label="predict", base_line=False, linewidth=1.5):
     """
     Plot ROC curve and calculate the Area under the curve (AUC) from the
     with the prediction scores and true labels.
@@ -156,7 +157,8 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True, label="p
         FN = np.sum(state[idx2] == 1)
         _pre = (TP+0.0)/(TP + FP)
         _rec = (TP+0.0)/(TP + FN)
-        pl.plot(_rec, _pre, marker='o', markersize=8, mec=color, mfc='none')
+        # pl.plot(_rec, _pre, marker='*', markersize=9, mec="k", mfc='none')
+        pl.plot(_rec, _pre, marker='o', markersize=8, mec=color, mfc=color)
     else:
         thresholds = np.sort(score_gap)
     

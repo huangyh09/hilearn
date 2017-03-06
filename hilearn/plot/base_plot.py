@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 import pylab as pl
 
@@ -25,59 +24,6 @@ def set_colors():
 
 def venn3_plot(sets, set_labels=('A', 'B', 'C'), 
     set_colors=None, alpha=1.0, circle_on=False):
-=======
-# These codes come from the following blog
-# http://messymind.net/making-matplotlib-look-like-ggplot/
-
-
-from matplotlib import *
-
-def rstyle(ax):
-    """Styles an axes to appear like ggplot2
-    Must be called after all plot and axis manipulation operations have been carried out (needs to know final tick spacing)
-    """
-    #set the style of the major and minor grid lines, filled blocks
-    ax.grid(True, 'major', color='w', linestyle='-', linewidth=1.4)
-    ax.grid(True, 'minor', color='0.92', linestyle='-', linewidth=0.7)
-    ax.patch.set_facecolor('0.85')
-    ax.set_axisbelow(True)
-   
-    # #set minor tick spacing to 1/2 of the major ticks
-    # ax.xaxis.set_minor_locator(MultipleLocator( (plt.xticks()[0][1]-plt.xticks()[0][0]) / 2.0 ))
-    # ax.yaxis.set_minor_locator(MultipleLocator( (plt.yticks()[0][1]-plt.yticks()[0][0]) / 2.0 ))
-   
-    #remove axis border
-    for child in ax.get_children():
-        if isinstance(child, matplotlib.spines.Spine):
-            child.set_alpha(0)
-       
-    #restyle the tick lines
-    for line in ax.get_xticklines() + ax.get_yticklines():
-        line.set_markersize(5)
-        line.set_color("gray")
-        line.set_markeredgewidth(1.4)
-   
-    #remove the minor tick lines    
-    for line in ax.xaxis.get_ticklines(minor=True) + ax.yaxis.get_ticklines(minor=True):
-        line.set_markersize(0)
-   
-    #only show bottom left ticks, pointing out of axis
-    rcParams['xtick.direction'] = 'out'
-    rcParams['ytick.direction'] = 'out'
-    ax.xaxis.set_ticks_position('bottom')
-    ax.yaxis.set_ticks_position('left')
-   
-   
-    if ax.legend_ <> None:
-        lg = ax.legend_
-        lg.get_frame().set_linewidth(0)
-        lg.get_frame().set_alpha(0.5)
-
-
-def venn3_plot(sets, set_labels=('A', 'B', 'C'), 
-    set_colors=('orangered', 'lawngreen', 'dodgerblue'),
-    alpha=0.6, circle_on=False):
->>>>>>> ad72d87084f8a612be55f6c19eab81b72959f06f
     """
     venn3 plot based on venn3 and venn3_circles from matplotlib_venn.
 
@@ -92,11 +38,8 @@ def venn3_plot(sets, set_labels=('A', 'B', 'C'),
 
     if circle_on:
         v = venn3_circles(subsets=(1,1,1,1,1,1,1), alpha=0.8, color="r")
-<<<<<<< HEAD
     if set_colors is None: 
         set_colors = favorite_colors[:3]
-=======
->>>>>>> ad72d87084f8a612be55f6c19eab81b72959f06f
     v = venn3(subsets=(1,1,1,1,1,1,1), set_labels=set_labels, 
         set_colors=set_colors, alpha=alpha)
     v.get_label_by_id('111').set_text(len(sets[0]&sets[1]&sets[2]))
@@ -107,12 +50,11 @@ def venn3_plot(sets, set_labels=('A', 'B', 'C'),
     v.get_label_by_id('010').set_text(len(sets[1]-sets[2]-sets[0]))
     v.get_label_by_id('001').set_text(len(sets[2]-sets[1]-sets[0]))
 
-<<<<<<< HEAD
     return v
 
 
 def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
-             widths=1.0, patch_artist=True, showmeans=True, alpha=1, **kwargs):
+             widths=0.9, patch_artist=True, showmeans=True, alpha=1, **kwargs):
     """
     Make boxes for a multiple groups data in different conditions.
     
@@ -200,9 +142,94 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
         pl.xticks(cond_loc, conditions)
     
     pl.xlim(x_loc[0]-0.7, x_loc[-1]+0.7)
-    pl.legend(loc="best", scatterpoints=1, fancybox=True, ncol=3)
+    pl.legend(loc="best", scatterpoints=1, fancybox=True, ncol=group_num)
 
     return bp
 
-=======
->>>>>>> ad72d87084f8a612be55f6c19eab81b72959f06f
+
+def contour2D(x, y, f, N=10, cmap="bwr", contourLine=True, optima=True, **kwargs):
+    """
+    Plot 2D contour.
+    
+    Parameters
+    ----------
+    x: array like (m1, )
+        The first dimention
+    y: array like (m2, )
+        The Second dimention
+    f: a function
+        The funciton return f(x1, y1)
+    N: int
+        The number of contours
+    contourLine: bool
+        Turn the contour line
+    optima: bool
+        Turn on the optima
+    **kwargs: further arguments for matplotlib.boxplot
+        
+    Returns
+    -------
+    result: contourf
+        The same as the return of matplotlib.plot.contourf
+        See: .. plot:: http://matplotlib.org/examples/pylab_examples/contourf_demo.html
+
+    Example
+    -------
+    def f(x, y):
+        return -x**2-y**2
+    x = np.linspace(-0.5, 0.5, 100)
+    y = np.linspace(-0.5, 0.5, 100)
+    contour2D(x, y, f)
+    """
+    X,Y = np.meshgrid(x,y)
+    Z = np.zeros(X.shape)
+    for i in range(Z.shape[0]):
+        for j in range(Z.shape[1]):
+            Z[i,j] = f(X[i,j],Y[i,j])
+    idx = np.argmax(Z)
+
+    cf = pl.contourf(X, Y, Z, N, cmap=cmap, **kwargs)
+    if contourLine is True:
+        C = pl.contour(X, Y, Z, N, alpha=0.7, colors="k", linewidth=0.5)
+        pl.clabel(C, inline=1, fontsize=10)
+    if optima is True:
+        pl.scatter(X[idx/100, idx%100], Y[idx/100, idx%100], s=120, marker='*')#, marker=(5,2))
+    
+    pl.xlim(np.min(x), np.max(x))
+    pl.ylim(np.min(y), np.max(y))
+    return cf
+
+
+
+def ecdf_plot(data, x=None, **kwargs):
+    """
+    Empirical plot for cumulative distribution function
+    
+    Parameters
+    ----------
+    data: array or list
+        data for the empirical CDF plot
+    x: array or list (optional)
+        the points to show the plot
+    **kwargs: 
+        **kwargs for matplotlib.plot
+        
+    Returns
+    -------
+    x: array
+        sorted x
+    ecdf_val:
+        values of empirical cdf for x
+    """
+    data = np.sort(np.array(data))
+    if x is None:
+        x = data
+    else:
+        x = np.sort(np.array(x))
+        
+    ecdf_val = np.zeros(len(x))
+    for i in range(len(x)):
+        ecdf_val[i] = np.mean(data < x[i])
+    
+    pl.plot(x, ecdf_val, **kwargs)
+    return x, ecdf_val
