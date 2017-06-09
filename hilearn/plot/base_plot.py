@@ -22,6 +22,21 @@ def set_colors():
     return favorite_colors
 
 
+def set_style(label_size=12):
+    import seaborn
+    import matplotlib
+    seaborn.set_style("white")
+    seaborn.set_style("ticks")
+
+    # matplotlib.rcParams['grid.alpha'] = 0.4
+    matplotlib.rcParams['xtick.labelsize'] = label_size
+    matplotlib.rcParams['ytick.labelsize'] = label_size
+    matplotlib.rcParams['legend.fontsize'] = label_size * 1.1
+    matplotlib.rcParams['axes.labelsize'] = label_size * 1.1
+    matplotlib.rcParams['axes.titlesize'] = label_size * 1.2
+    matplotlib.rcParams['axes.titleweight'] = 'bold'
+
+
 def venn3_plot(sets, set_labels=('A', 'B', 'C'), 
     set_colors=None, alpha=1.0, circle_on=False):
     """
@@ -143,6 +158,7 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
     
     pl.xlim(x_loc[0]-0.7, x_loc[-1]+0.7)
     pl.legend(loc="best", scatterpoints=1, fancybox=True, ncol=group_num)
+    pl.grid(alpha=0.4)
 
     return bp
 

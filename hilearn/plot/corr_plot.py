@@ -3,9 +3,9 @@ import pylab as pl
 import scipy.stats as st
 from sklearn import linear_model
 
-def corr_plot(x, y, max_num=10000, outlier=0.05, line_on=True,
+def corr_plot(x, y, max_num=10000, outlier=0.01, line_on=True,
               corr_on=True, size=30, dot_color=None, outlier_color="r",
-              alpha=0.8): #"deepskyblue"
+              alpha=0.8, color_rate=10): #"deepskyblue"
     score = st.pearsonr(x, y)
     np.random.seed(0)
     if len(x) > max_num:
@@ -17,9 +17,10 @@ def corr_plot(x, y, max_num=10000, outlier=0.05, line_on=True,
     z = st.gaussian_kde(xy)(xy)
     idx = z.argsort()
     idx1, idx2 = idx[outlier:], idx[:outlier]
-
+    
     if dot_color is None: 
-        c_score = np.log2(z[idx]+100)
+        #c_score = np.log2(z[idx]+100)
+        c_score = np.log2(z[idx] + color_rate*np.min(z[idx]))
     else:
         #idx2 = []
         c_score = dot_color
@@ -27,7 +28,7 @@ def corr_plot(x, y, max_num=10000, outlier=0.05, line_on=True,
     pl.set_cmap("Blues")
     pl.scatter(x[idx], y[idx], c=c_score, edgecolor='', s=size, alpha=alpha)
     pl.scatter(x[idx2], y[idx2], c=outlier_color, edgecolor='', s=size/5, alpha=alpha/3.0)#/5
-    pl.grid(alpha=0.3)
+    pl.grid(alpha=0.4)
 
     if line_on:
         clf = linear_model.LinearRegression()
@@ -139,6 +140,13 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True,
     with the prediction scores and true labels.
     The threshold is the step of the ROC cureve.
     """
+
+    ###Test compare
+    # from sklearn.metrics import precision_recall_curve,average_precision_score
+    # precision, recall, thresholds = precision_recall_curve(labels, BF_tmp)
+    # ap = average_precision_score(labels, BF_tmp)
+    # pl.plot(recall, precision, label="%.3f" %(ap))
+
     if color is None or color=="none": 
         color = np.random.rand(3,1)
     
