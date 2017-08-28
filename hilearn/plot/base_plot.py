@@ -1,8 +1,6 @@
 import numpy as np
 import pylab as pl
 
-
-
 # codes for ggplot like backgroud
 # http://messymind.net/making-matplotlib-look-like-ggplot/
 # Or simply import seaborn
@@ -11,15 +9,27 @@ favorite_colors=["deepskyblue", "limegreen", "orangered", "cyan", "magenta",
                  "gold", "blueviolet", "dodgerblue", "greenyellow", "tomato",
                  "turquoise", "orchid", "darkorange", "mediumslateblue"]
 
-def set_colors():
+#seaborn_colors = seaborn.color_palette("hls", 8)
+
+def set_colors(color_list=favorite_colors):
     """
     Set the favorite colors in matplotlib color_cycle and return the 
     list of favorite colors.
     """
     import matplotlib
-    matplotlib.rcParams['axes.color_cycle'] = favorite_colors
-    
-    return favorite_colors
+    matplotlib.rcParams['axes.color_cycle'] = color_list
+    return color_list
+
+
+def set_frame(ax):
+    """Example of setting the frame of the plot box.
+    """
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(True)
+    ax.spines['left'].set_visible(False)
+    ax.xaxis.set_ticks_position('bottom')
+    return ax
 
 
 def set_style(label_size=12):
