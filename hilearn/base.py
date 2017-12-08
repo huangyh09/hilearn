@@ -33,7 +33,6 @@ def id_mapping(IDs1, IDs2):
             RV_idx1.append(idx1[i])
             RV_idx2.append(idx2[j])
             i += 1
-            j += 1
         elif IDs1[idx1[i]] > IDs2[idx2[j]]:
             j += 1
             
