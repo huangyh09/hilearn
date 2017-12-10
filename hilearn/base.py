@@ -2,9 +2,11 @@
 
 import numpy as np
 
-def id_mapping(IDs1, IDs2):
+def id_mapping(IDs1, IDs2, uniq_ref_only=True):
     """
-    Mapping IDs2 to IDs1, both of which should only contain unique ids.
+    Mapping IDs2 to IDs1. IDs1 (ref id) can have repeat values, but IDs2 need 
+    to only contain unique ids.
+    Therefore, IDs2[rv_idx] will be the same as IDs1.
     
     Parameters
     ----------
@@ -33,6 +35,7 @@ def id_mapping(IDs1, IDs2):
             RV_idx1.append(idx1[i])
             RV_idx2.append(idx2[j])
             i += 1
+            if uniq_ref_only: j += 1
         elif IDs1[idx1[i]] > IDs2[idx2[j]]:
             j += 1
             
