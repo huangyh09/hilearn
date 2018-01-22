@@ -27,17 +27,21 @@ def set_frame(ax):
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['bottom'].set_visible(True)
-    ax.spines['left'].set_visible(False)
+    ax.spines['left'].set_visible(True)
     ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
+    ax.get_xaxis().set_tick_params(direction='out')
+    ax.get_yaxis().set_tick_params(direction='out')
     return ax
 
 
-def set_style(label_size=12):
-    import seaborn
-    import matplotlib
-    seaborn.set_style("white")
-    seaborn.set_style("ticks")
+def set_style(label_size=12, seaborn_on=True):
+    if seaborn_on:
+        import seaborn
+        seaborn.set_style("white")
+        seaborn.set_style("ticks")
 
+    import matplotlib
     # matplotlib.rcParams['grid.alpha'] = 0.4
     matplotlib.rcParams['xtick.labelsize'] = label_size
     matplotlib.rcParams['ytick.labelsize'] = label_size
