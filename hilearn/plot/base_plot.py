@@ -1,5 +1,5 @@
 import numpy as np
-import pylab as pl
+import matplotlib.pyplot as plt
 
 # codes for ggplot like backgroud
 # http://messymind.net/making-matplotlib-look-like-ggplot/
@@ -110,9 +110,9 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
     data1 = [np.random.rand(50), np.random.rand(30)-.2, np.random.rand(10)+.3]
     data2 = [np.random.rand(40), np.random.rand(10)-.2, np.random.rand(15)+.3]
 
-    pl.subplot(1,2,1)
+    plt.subplot(1,2,1)
     boxgroup([data1, data2], labels=("G1","G2","G3"), conditions=["C1","C2"])
-    pl.subplot(1,2,2)
+    plt.subplot(1,2,2)
     boxgroup(data1, conditions=("G1","G2","G3"))
     """
     box_data = []
@@ -141,7 +141,7 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
             cond_loc[i] = np.mean(temp_loc)+x_loc[-1]+2
             x_loc = np.append(x_loc, x_loc[-1]+2+temp_loc)
         
-    bp = pl.boxplot(box_data, notch, sys, positions=x_loc, widths=widths, 
+    bp = plt.boxplot(box_data, notch, sys, positions=x_loc, widths=widths, 
                     patch_artist=patch_artist, **kwargs)
     if colors is None:
         colors = favorite_colors
@@ -159,20 +159,20 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
             linewidth=2, alpha=alpha)
         
         if showmeans is True:
-            pl.plot([x_loc[i]], [np.mean(box_data[i])],
-                    color='w', marker='*', markersize=9)#, markeredgecolor='k'
+            plt.plot([x_loc[i]], [np.mean(box_data[i])],
+                     color='w', marker='*', markersize=9)#, markeredgecolor='k'
         
     if labels is not None:
         for i in range(group_num):
-            pl.scatter([], [], s=150, c=colors[i], marker='s', 
-                       edgecolor='none', alpha=alpha, label=labels[i])
+            plt.scatter([], [], s=150, c=colors[i], marker='s', 
+                        edgecolor='none', alpha=alpha, label=labels[i])
             
     if conditions is not None:
-        pl.xticks(cond_loc, conditions)
+        plt.xticks(cond_loc, conditions)
     
-    pl.xlim(x_loc[0]-0.7, x_loc[-1]+0.7)
-    pl.legend(loc="best", scatterpoints=1, fancybox=True, ncol=group_num)
-    pl.grid(alpha=0.4)
+    plt.xlim(x_loc[0]-0.7, x_loc[-1]+0.7)
+    plt.legend(loc="best", scatterpoints=1, fancybox=True, ncol=group_num)
+    plt.grid(alpha=0.4)
 
     return bp
 
@@ -218,15 +218,16 @@ def contour2D(x, y, f, N=10, cmap="bwr", contourLine=True, optima=True, **kwargs
             Z[i,j] = f(X[i,j],Y[i,j])
     idx = np.argmax(Z)
 
-    cf = pl.contourf(X, Y, Z, N, cmap=cmap, **kwargs)
+    cf = plt.contourf(X, Y, Z, N, cmap=cmap, **kwargs)
     if contourLine is True:
-        C = pl.contour(X, Y, Z, N, alpha=0.7, colors="k", linewidth=0.5)
-        pl.clabel(C, inline=1, fontsize=10)
+        C = plt.contour(X, Y, Z, N, alpha=0.7, colors="k", linewidth=0.5)
+        plt.clabel(C, inline=1, fontsize=10)
     if optima is True:
-        pl.scatter(X[idx/100, idx%100], Y[idx/100, idx%100], s=120, marker='*')#, marker=(5,2))
+        plt.scatter(X[idx/100, idx%100], Y[idx/100, idx%100], s=120, marker='*')
+                    #, marker=(5,2))
     
-    pl.xlim(np.min(x), np.max(x))
-    pl.ylim(np.min(y), np.max(y))
+    plt.xlim(np.min(x), np.max(x))
+    plt.ylim(np.min(y), np.max(y))
     return cf
 
 
@@ -261,5 +262,5 @@ def ecdf_plot(data, x=None, **kwargs):
     for i in range(len(x)):
         ecdf_val[i] = np.mean(data < x[i])
     
-    pl.plot(x, ecdf_val, **kwargs)
+    plt.plot(x, ecdf_val, **kwargs)
     return x, ecdf_val

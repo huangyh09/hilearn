@@ -1,11 +1,8 @@
-# Copyright(c) 2016, The HiLearn developer (Yuanhua Huang)
-# Licensed under the MIT License at
-# http://opensource.org/licenses/MIT
+# Copyright(c) 2019, The HiLearn developer (Yuanhua Huang)
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
-
-from .base import id_mapping
+from .base import match, id_mapping
 from .stats import permutation_test
 from .cross_validation import CrossValidation
 from .plot.base_plot import boxgroup, venn3_plot

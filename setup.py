@@ -30,16 +30,17 @@ setup(
 
     # The project's main homepage.
     # url='http://hilearn.sourceforge.net',
+    url='https://github.com/huangyh09/hilearn',
 
     # Author details
     author='Yuanhua Huang',
-    author_email='Y.Huang@ed.ac.uk',
+    author_email='yuanhua@ebi.ac.uk',
 
     # Choose your license
-    license='MIT',
+    license='Apache-2.0',
 
     # What does your project relate to?
-    keywords=['machine learning methods'],
+    keywords=['machine learning', 'data visualisation'],
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
