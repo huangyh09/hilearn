@@ -1,6 +1,5 @@
 # Copyright(c) 2019, The HiLearn developer (Yuanhua Huang)
 # Licensed under the Apache-2.0 License
-from .version import __version__
 
 from .box_plot import *
 from .dot_plot import *
