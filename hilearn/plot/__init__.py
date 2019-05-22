@@ -1,6 +1,7 @@
-# Copyright(c) 2016, The HiLearn developer (Yuanhua Huang)
-# Licensed under the MIT License at
-# http://opensource.org/licenses/MIT
+# Copyright(c) 2019, The HiLearn developer (Yuanhua Huang)
+# Licensed under the Apache-2.0 License
 
+from .box_plot import *
+from .dot_plot import *
 from .base_plot import *
-from .corr_plot import *
+from .curve_plot import *

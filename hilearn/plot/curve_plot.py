@@ -1,54 +1,8 @@
 import numpy as np
-import scipy.stats as st
 import matplotlib.pyplot as plt
-from sklearn import linear_model
 
-def corr_plot(x, y, max_num=10000, outlier=0.01, line_on=True,
-              corr_on=True, size=30, dot_color=None, outlier_color="r",
-              alpha=0.8, color_rate=10): #"deepskyblue"
-    score = st.pearsonr(x, y)
-    np.random.seed(0)
-    if len(x) > max_num:
-        idx = np.random.permutation(len(x))[:max_num]
-        x, y = x[idx], y[idx]
-    outlier = int(len(x) * outlier)
-    
-    xy = np.vstack([x,y])
-    z = st.gaussian_kde(xy)(xy)
-    idx = z.argsort()
-    idx1, idx2 = idx[outlier:], idx[:outlier]
-    
-    if dot_color is None: 
-        #c_score = np.log2(z[idx]+100)
-        c_score = np.log2(z[idx] + color_rate*np.min(z[idx]))
-    else:
-        #idx2 = []
-        c_score = dot_color
-    
-    plt.set_cmap("Blues")
-    plt.scatter(x[idx], y[idx], c=c_score, edgecolor='', s=size, alpha=alpha)
-    plt.scatter(x[idx2], y[idx2], c=outlier_color, edgecolor='', s=size/5, 
-                alpha=alpha/3.0)#/5
-    plt.grid(alpha=0.4)
-
-    if line_on:
-        clf = linear_model.LinearRegression()
-        clf.fit(x.reshape(-1,1), y)
-        xx = np.linspace(x.min(), x.max(), 1000).reshape(-1,1)
-        yy = clf.predict(xx)
-        plt.plot(xx, yy, "k--", label="R=%.3f" %score[0])
-        # plt.plot(xx, yy, "k--")
-
-    if corr_on:
-        plt.legend(loc="best", fancybox=True, ncol=1)
-        # plt.annotate("R=%.3f\np=%.1e" %score, fontsize='x-large', 
-        #             xy=(0.97, 0.05), xycoords='axes fraction',
-        #             textcoords='offset points', ha='right', va='bottom')
-
-
-
-def ROC_plot(state, scores, threshold=None, color=None, legend_on=True, label="predict", 
-             base_line=True, linewidth=1.0):
+def ROC_plot(state, scores, threshold=None, color=None, legend_on=True, 
+             label="predict", base_line=True, linewidth=1.0):
     """
     Plot ROC curve and calculate the Area under the curve (AUC) from the
     with the prediction scores and true labels.
@@ -170,3 +124,38 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True,
     plt.ylabel("Precision: TP/(TP+FP)")
     plt.xlabel("Recall: TP/(TP+FN)")
     return rec, pre, thresholds, auc
+
+
+
+def ecdf_plot(data, x=None, **kwargs):
+    """
+    Empirical plot for cumulative distribution function
+    
+    Parameters
+    ----------
+    data: array or list
+        data for the empirical CDF plot
+    x: array or list (optional)
+        the points to show the plot
+    **kwargs: 
+        **kwargs for matplotlib.plot
+        
+    Returns
+    -------
+    x: array
+        sorted x
+    ecdf_val:
+        values of empirical cdf for x
+    """
+    data = np.sort(np.array(data))
+    if x is None:
+        x = data
+    else:
+        x = np.sort(np.array(x))
+        
+    ecdf_val = np.zeros(len(x))
+    for i in range(len(x)):
+        ecdf_val[i] = np.mean(data < x[i])
+    
+    plt.plot(x, ecdf_val, **kwargs)
+    return x, ecdf_val

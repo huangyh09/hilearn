@@ -39,7 +39,12 @@ class CrossValidation:
         """Run cross-validation for classification.
         For classification, make sure the input model has the following 
         functions: fit, predict and predict_proba.
+
+        For using leave-one-out, set folds=-1 or the same length of Y.
         """
+        if folds == -1:
+            folds = len(Y)
+
         cc = np.unique(self.Y)
         self.Ystate = np.zeros(self.Y.shape[0])
         self.Yscore = np.zeros((self.Y.shape[0], len(cc)))
@@ -47,18 +52,22 @@ class CrossValidation:
         fd_lens = []
         for i in range(len(cc)):
             _idx = np.where(self.Y == cc[i])[0]
-            if shuffle: np.random.shuffle(_idx)
+            if shuffle: 
+                np.random.shuffle(_idx)
             idx_all.append(_idx)
             fd_lens.append(int(len(_idx)/folds))
         
         for i in range(folds):
             idx_use = np.array([], "int")
-            for j in range(len(cc)):
-                if i < folds-1:
-                    _idx = idx_all[j][i*fd_lens[j]: (i+1)*fd_lens[j]]
-                else:
-                    _idx = idx_all[j][i*fd_lens[j]:]
-                idx_use = np.append(idx_use, _idx)
+            if (folds == -1 or folds == len(self.Y)):
+                idx_use = [i]
+            else:
+                for j in range(len(cc)):
+                    if i < folds-1:
+                        _idx = idx_all[j][i*fd_lens[j]: (i+1)*fd_lens[j]]
+                    else:
+                        _idx = idx_all[j][i*fd_lens[j]:]
+                    idx_use = np.append(idx_use, _idx)
                     
             Xtest = self.X[idx_use, :]
             Xtrain = np.delete(self.X, idx_use, 0)
