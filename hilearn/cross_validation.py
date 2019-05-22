@@ -43,7 +43,7 @@ class CrossValidation:
         For using leave-one-out, set folds=-1 or the same length of Y.
         """
         if folds == -1:
-            folds = len(Y)
+            folds = self.Y.shape[0]
 
         cc = np.unique(self.Y)
         self.Ystate = np.zeros(self.Y.shape[0])
@@ -59,7 +59,7 @@ class CrossValidation:
         
         for i in range(folds):
             idx_use = np.array([], "int")
-            if (folds == -1 or folds == len(self.Y)):
+            if (folds == -1 or folds == self.Y.shape[0]):
                 idx_use = [i]
             else:
                 for j in range(len(cc)):
