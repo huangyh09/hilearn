@@ -5,3 +5,4 @@ from .box_plot import *
 from .dot_plot import *
 from .base_plot import *
 from .curve_plot import *
+from .seaborn_plot import *
