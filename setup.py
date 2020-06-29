@@ -35,7 +35,7 @@ setup(
 
     # Author details
     author='Yuanhua Huang',
-    author_email='yuanhua@ebi.ac.uk',
+    author_email='yuanhua@hku.hk',
 
     # Choose your license
     license='Apache-2.0',
