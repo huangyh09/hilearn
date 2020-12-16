@@ -1,8 +1,10 @@
 # some wrapped functions from seaborn
 import numpy as np
 import scipy.stats as st
+import matplotlib.pyplot as plt
 
-def regplot(x, y, hue=None, hue_values=None, show_corr=True, **kwargs):
+def regplot(x, y, hue=None, hue_values=None, show_corr=True, legend_on=True,
+            **kwargs):
     """Wrap plot of `seaborn.regplot` with supporting hue and showing 
     correlation coeffecient.
 
@@ -36,4 +38,7 @@ def regplot(x, y, hue=None, hue_values=None, show_corr=True, **kwargs):
             else:
                 _label = None
             seaborn.regplot(x[_idx], y[_idx], label=_label, **kwargs)
+    
+    if legend_on:
+        plt.legend()
     
