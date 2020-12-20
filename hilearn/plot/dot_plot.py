@@ -26,8 +26,8 @@ def corr_plot(x, y, max_num=10000, outlier=0.01, line_on=True,
         c_score = dot_color
     
     plt.set_cmap("Blues")
-    plt.scatter(x[idx], y[idx], c=c_score, edgecolor='', s=size, alpha=alpha)
-    plt.scatter(x[idx2], y[idx2], c=outlier_color, edgecolor='', s=size/5, 
+    plt.scatter(x[idx], y[idx], c=c_score, edgecolor=None, s=size, alpha=alpha)
+    plt.scatter(x[idx2], y[idx2], c=outlier_color, edgecolor=None, s=size/5, 
                 alpha=alpha/3.0)#/5
     plt.grid(alpha=0.4)
 
