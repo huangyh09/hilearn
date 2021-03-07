@@ -40,5 +40,20 @@ Boxgroup plot
 .. autofunction:: hilearn.plot.boxgroup
 
 
+Styling
+=======
 
+Setting fonts
+-------------
 
+.. autofunction:: hilearn.plot.set_style
+
+Setting frame
+-------------
+
+.. autofunction:: hilearn.plot.set_frame
+
+Setting colors
+--------------
+
+.. autofunction:: hilearn.plot.set_colors

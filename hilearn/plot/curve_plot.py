@@ -52,7 +52,7 @@ def ROC_plot(state, scores, threshold=None, color=None, legend_on=True,
         >>> score1 = 1 - 0.4 * np.random.rand(300)
         >>> scores = np.append(score0, score1)
         >>> state = np.append(np.zeros(100), np.ones(300))
-        >>> ROC_plot(state, scores)
+        >>> res = ROC_plot(state, scores, threshold=0.5, color='blue')
     """
     # if color is None or color=="none": 
     #     color = np.random.rand(3,1)
@@ -70,14 +70,6 @@ def ROC_plot(state, scores, threshold=None, color=None, legend_on=True,
     score_gap = np.append(score_gap, np.max(score_gap)+0.1)
     if threshold is not None:
         thresholds = np.sort(np.append(threshold, score_gap))
-        _idx = np.where(scores >= threshold)[0]
-        _fpr = np.sum(state[_idx] == 0)/np.sum(state == 0).astype('float')
-        _tpr = np.sum(state[_idx] == 1)/np.sum(state == 1).astype('float')
-        # plt.scatter(_fpr, _tpr, marker="o", s=80, facecolors='none', edgecolors=color)
-        if color is None:
-            plt.plot(_fpr, _tpr, marker='o', markersize=8, mfc='none')
-        else:
-            plt.plot(_fpr, _tpr, marker='o', markersize=8, mec=color, mfc=color) 
     else:
         thresholds = np.sort(score_gap)
     #thresholds = np.arange(np.min(threshold), 1+2*threshold, threshold)
@@ -99,6 +91,17 @@ def ROC_plot(state, scores, threshold=None, color=None, legend_on=True,
         plt.plot(fpr, tpr, "-",  linewidth=linewidth, color=color,
                  label="%s: AUC=%.3f" %(legend_label,auc))
     
+    ## Adding dot with given threshold
+    if threshold is not None:
+        _idx = np.where(scores >= threshold)[0]
+        _fpr = np.sum(state[_idx] == 0)/np.sum(state == 0).astype('float')
+        _tpr = np.sum(state[_idx] == 1)/np.sum(state == 1).astype('float')
+        if color is None:
+            plt.plot(_fpr, _tpr, marker='o', markersize=8, mec='k', mfc='none')
+        else:
+            plt.plot(_fpr, _tpr, marker='o', markersize=8, mec=color, mfc=color)
+        
+    ## Adding base line plot
     if base_line: plt.plot(np.arange(0,2), np.arange(0,2), "k--", linewidth=1.0,
         label="random: AUC=0.500")
         
@@ -161,7 +164,7 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True,
         >>> score1 = 1 - 0.4 * np.random.rand(300)
         >>> scores = np.append(score0, score1)
         >>> state = np.append(np.zeros(100), np.ones(300))
-        >>> PR_curve(state, scores)
+        >>> res = PR_curve(state, scores, threshold=0.5, color='blue')
     """
 
     ###Test compare
@@ -184,17 +187,9 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True,
         score_gap = score_gap[idx[:2000]]
     #score_gap = np.append(np.min(score_gap)-0.1, score_gap)
     #score_gap = np.append(score_gap, np.max(score_gap)+0.1)
+
     if threshold is not None:
         thresholds = np.sort(np.append(threshold, score_gap))
-        idx1 = np.where(scores >= threshold)[0]
-        idx2 = np.where(scores <  threshold)[0]
-        FP = np.sum(state[idx1] == 0)
-        TP = np.sum(state[idx1] == 1)
-        FN = np.sum(state[idx2] == 1)
-        _pre = (TP+0.0)/(TP + FP)
-        _rec = (TP+0.0)/(TP + FN)
-        # plt.plot(_rec, _pre, marker='*', markersize=9, mec="k", mfc='none')
-        plt.plot(_rec, _pre, marker='o', markersize=8, mec=color, mfc=color)
     else:
         thresholds = np.sort(score_gap)
     
@@ -223,6 +218,21 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True,
         plt.plot(_rec, _pre, "-",  linewidth=linewidth, color=color,
                  label="%s: AUC=%.3f" %(legend_label,auc))
 
+    ## Adding dot with given threshold
+    if threshold is not None:
+        idx1 = np.where(scores >= threshold)[0]
+        idx2 = np.where(scores <  threshold)[0]
+        FP = np.sum(state[idx1] == 0)
+        TP = np.sum(state[idx1] == 1)
+        FN = np.sum(state[idx2] == 1)
+        _pre = (TP+0.0)/(TP + FP)
+        _rec = (TP+0.0)/(TP + FN)
+        if color is None:
+            plt.plot(_rec, _pre, marker='o', markersize=8, mec='k', mfc='none')
+        else:
+            plt.plot(_rec, _pre, marker='o', markersize=8, mec=color, mfc=color)
+        
+    ## Adding base line plot
     if base_line: plt.plot(np.arange(0,2), 1-np.arange(0,2), "k--", 
                            linewidth=1.0, label="random: AUC=0.500")
         

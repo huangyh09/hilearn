@@ -31,7 +31,7 @@ A small library of machine learning models and utility & plotting functions:
    
    install
    plotting
-   releases
+   release
 
 
 .. toctree::

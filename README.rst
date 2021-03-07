@@ -1,3 +1,12 @@
+|PyPI| |Docs| |Build Status|
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/hilearn.svg
+    :target: https://pypi.org/project/hilearn
+.. |Docs| image:: https://readthedocs.org/projects/hilearn/badge/?version=latest
+   :target: https://hilearn.readthedocs.io
+.. |Build Status| image:: https://travis-ci.org/huangyh09/hilearn.svg?branch=master
+   :target: https://travis-ci.org/huangyh09/hilearn
+   
 HiLearn
 =======
 
@@ -14,7 +23,7 @@ A small library of machine learning models and utility & plotting functions:
 How to install?
 ---------------
 
-Easy install with `pip` by `pip install hilearn` for released version or the 
+Easy install with *pip* by ``pip install hilearn`` for released version or the 
 latest version on github (less stable though)
 
 .. code-block:: bash

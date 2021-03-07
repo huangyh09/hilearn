@@ -1,5 +1,7 @@
 # Just until rtd.org understands pyproject.toml
-hilearn>=0.2.1
+hilearn>=0.2.2
+seaborn
+
 setuptools
 setuptools_scm
 typing_extensions
