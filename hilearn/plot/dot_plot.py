@@ -4,8 +4,55 @@ import matplotlib.pyplot as plt
 from sklearn import linear_model
 
 def corr_plot(x, y, max_num=10000, outlier=0.01, line_on=True,
-              corr_on=True, size=30, dot_color=None, outlier_color="r",
-              alpha=0.8, color_rate=10): #"deepskyblue"
+    legend_on=True, size=30, dot_color=None, outlier_color="r",
+    alpha=0.8, color_rate=10, corr_on=None):
+    """Correlation plot for large number of dots by showing the density and 
+    Pearson's correlatin coefficient
+
+    Parameters
+    ----------
+    x: `array_like`, (1, ) 
+        Values on x-axis
+    y: `array_like`, (1, ) 
+        Values on y-axis
+    max_num: int
+        Maximum number of dots to plotting by subsampling
+    outlier: float
+        The proportion of dots as outliers in different color
+    line_on : bool
+        If True, show the regression line
+    legend_on: bool
+        If True, show the Pearson's correlatin coefficient in legend. Replace
+        of *corr_on*
+    size: float
+        The dot size
+    dot_color: string
+        The dot color. If None (by default), density color will be use
+    outlier_color: string
+        The color for outlier dot
+    alpha : float
+        The transparency: 0 (fully transparent) to 1
+    color_rate: float
+        Color rate for density
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        The Axes object containing the plot.
+
+    Examples
+    --------
+
+    .. plot::
+
+        >>> import numpy as np
+        >>> from hilearn.plot import corr_plot
+        >>> np.random.seed(1)
+        >>> x = np.append(np.random.normal(size=200), 5 + np.random.normal(size=500))
+        >>> y = 2 * x + 3 * np.random.normal(size=700)
+        >>> corr_plot(x, y)
+    """
+    
     score = st.pearsonr(x, y)
     np.random.seed(0)
     if len(x) > max_num:
@@ -29,7 +76,8 @@ def corr_plot(x, y, max_num=10000, outlier=0.01, line_on=True,
     plt.scatter(x[idx], y[idx], c=c_score, edgecolor=None, s=size, alpha=alpha)
     plt.scatter(x[idx2], y[idx2], c=outlier_color, edgecolor=None, s=size/5, 
                 alpha=alpha/3.0)#/5
-    plt.grid(alpha=0.4)
+
+    # plt.grid(alpha=0.4)
 
     if line_on:
         clf = linear_model.LinearRegression()
@@ -39,7 +87,7 @@ def corr_plot(x, y, max_num=10000, outlier=0.01, line_on=True,
         plt.plot(xx, yy, "k--", label="R=%.3f" %score[0])
         # plt.plot(xx, yy, "k--")
 
-    if corr_on:
+    if legend_on or corr_on:
         plt.legend(loc="best", fancybox=True, ncol=1)
         # plt.annotate("R=%.3f\np=%.1e" %score, fontsize='x-large', 
         #             xy=(0.97, 0.05), xycoords='axes fraction',

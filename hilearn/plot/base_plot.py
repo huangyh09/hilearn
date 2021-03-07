@@ -10,13 +10,14 @@ favorite_colors=["deepskyblue", "limegreen", "orangered", "cyan", "magenta",
                  "gold", "blueviolet", "dodgerblue", "greenyellow", "tomato",
                  "turquoise", "orchid", "darkorange", "mediumslateblue"]
 
-WeiZhu_colors = ['#4796d7', '#f79e54', '#79a702', '#df5858', '#556cab', 
+# Picked by Wei Z as a gift
+hilearn_colors = ['#4796d7', '#f79e54', '#79a702', '#df5858', '#556cab', 
                  '#de7a1f', '#ffda5c', '#4b595c', '#6ab186', '#bddbcf', 
                  '#daad58', '#488a99', '#f79b78', '#ffba00']
 
 #seaborn_colors = seaborn.color_palette("hls", 8)
 
-def set_colors(color_list=WeiZhu_colors):
+def set_colors(color_list=hilearn_colors):
     """
     Set the favorite colors in matplotlib color_cycle and return the 
     list of favorite colors.

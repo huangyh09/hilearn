@@ -5,20 +5,48 @@ import matplotlib.pyplot as plt
 
 def regplot(x, y, hue=None, hue_values=None, show_corr=True, legend_on=True,
             **kwargs):
-    """Wrap plot of `seaborn.regplot` with supporting hue and showing 
-    correlation coeffecient.
+    """Extended plotting of `seaborn.regplot` with showing correlation 
+    coeffecient and supporting multiple regression lines by hue (and hue_values) 
 
     Parameters
     ----------
-    x: `array_like`, (1, ) for values on x-axis
-    y: `array_like`, (1, ) for values on y-axis
+    x: `array_like`, (1, ) 
+        Values on x-axis
+    y: `array_like`, (1, ) 
+        Values on y-axis
     hue: `array_like`, (1, )
         Values to stratify samples into different groups
     hue_values: list or `array_like`
-        A list of unique hue values; orders are kept in layers
+        A list of unique hue values; orders are retained in plotting layers
     show_corr: bool
         Whether show Pearson's correlation coefficient in legend
-    **kwargs: for `seaborn.regplot`
+    legend_on: bool
+        Whether display legend
+    **kwargs: 
+        for `seaborn.regplot`
+        https://seaborn.pydata.org/generated/seaborn.regplot.html
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        The Axes object containing the plot.
+        same as seaborn.regplot
+
+    Examples
+    --------
+
+    .. plot::
+
+        >>> import numpy as np
+        >>> from hilearn.plot import regplot
+        >>> np.random.seed(1)
+        >>> x1 = np.random.rand(50)
+        >>> x2 = np.random.rand(50)
+        >>> y1 = 2 * x1 + (0.5 + 2 * x1) * np.random.rand(50)
+        >>> y2 = 4 * x2 + ((2 + x2) ** 2) * np.random.rand(50)
+        >>> x, y = np.append(x1, x2), np.append(y1, y2)
+        >>> hue = np.array(['group1'] * 50 + ['group2'] * 50)
+        >>> regplot(x, y, hue)
     """
     import seaborn
     if hue is None:
@@ -26,7 +54,7 @@ def regplot(x, y, hue=None, hue_values=None, show_corr=True, legend_on=True,
             _label = "R=%.2f" %(st.pearsonr(x, y)[0])
         else:
             _label = None
-        seaborn.regplot(x, y, label=_label, **kwargs)
+        ax = seaborn.regplot(x, y, label=_label, **kwargs)
     else:
         if hue_values is None:
             hue_values = np.unique(hue)
@@ -37,8 +65,9 @@ def regplot(x, y, hue=None, hue_values=None, show_corr=True, legend_on=True,
                     st.pearsonr(x[_idx], y[_idx])[0])
             else:
                 _label = None
-            seaborn.regplot(x[_idx], y[_idx], label=_label, **kwargs)
+            ax = seaborn.regplot(x[_idx], y[_idx], label=_label, **kwargs)
     
     if legend_on:
         plt.legend()
     
+    return ax

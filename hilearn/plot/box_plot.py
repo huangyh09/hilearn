@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from .base_plot import hilearn_colors
 
 def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
-             widths=0.9, patch_artist=True, showmeans=True, alpha=1, **kwargs):
+             widths=0.9, patch_artist=True, alpha=1, **kwargs):
     """
     Make boxes for a multiple groups data in different conditions.
     
@@ -15,25 +16,51 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
     labels: a list or an array
         The names of each group memeber
     conditions: a list or an array
-        The names of each conditions
-    **kwargs: further arguments for matplotlib.boxplot
+        The names of each condition
+    colors : a list of array
+        The colors of each condition
+    notch : bool
+        Whether show notch, same as matplotlib.pyplot.boxplot
+    sys : string
+        The default symbol for flier points, same as matplotlib.pyplot.boxplot
+    widths : scalar or array-like
+        Sets the width of each box either with a scalar or a sequence. Same as 
+        matplotlib.pyplot.boxplot
+    patch_artist : bool, optional (True)
+        If False produces boxes with the Line2D artist. Otherwise, boxes and 
+        drawn with Patch artists
+    alpha : float
+        The transparency: 0 (fully transparent) to 1
+    
+    **kwargs: 
+        further arguments for matplotlib.pyplot.boxplot, 
+        e.g., `showmeans`, `meanprops`: 
+        https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.boxplot.html
         
     Returns
     -------
     result: dict
-        The same as the return of matplotlib.boxplot
-        See: .. plot:: mpl_examples/statistics/boxplot_demo.py
+        The same as the return of matplotlib.pyplot.boxplot
+    
+    Examples
+    --------
 
-    Example
-    -------
-    data1 = [np.random.rand(50), np.random.rand(30)-.2, np.random.rand(10)+.3]
-    data2 = [np.random.rand(40), np.random.rand(10)-.2, np.random.rand(15)+.3]
+    .. plot::
 
-    plt.subplot(1,2,1)
-    boxgroup([data1, data2], labels=("G1","G2","G3"), conditions=["C1","C2"])
-    plt.subplot(1,2,2)
-    boxgroup(data1, conditions=("G1","G2","G3"))
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from hilearn.plot import boxgroup
+        >>> np.random.seed(1)
+        >>> data1 = [np.random.rand(50), np.random.rand(30)-.2, np.random.rand(10)+.3]
+        >>> data2 = [np.random.rand(40), np.random.rand(10)-.2, np.random.rand(15)+.3]
+        >>> meanprops={'markerfacecolor': 'w', 'markeredgecolor': 'w'}
+        >>> boxgroup(data1, conditions=("G1","G2","G3"), showmeans=True, meanprops=meanprops)
+        >>> plt.show()
+
+        >>> boxgroup([data1, data2], labels=("G1","G2","G3"), conditions=["C1","C2"])
+        >>> plt.show()
     """
+
     box_data = []
     cond_num = len(x)
     cond_loc = np.zeros(len(x))
@@ -61,9 +88,9 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
             x_loc = np.append(x_loc, x_loc[-1]+2+temp_loc)
         
     bp = plt.boxplot(box_data, notch, sys, positions=x_loc, widths=widths, 
-                    patch_artist=patch_artist, **kwargs)
+                     patch_artist=patch_artist, **kwargs)
     if colors is None:
-        colors = favorite_colors
+        colors = hilearn_colors
     
     for i in range(len(box_data)):
         bp['medians'][i].set(color='blue', linewidth=2, alpha=alpha)
@@ -77,9 +104,12 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
         bp['boxes'][i].set(color=colors[i%group_num], 
             linewidth=2, alpha=alpha)
         
-        if showmeans is True:
-            plt.plot([x_loc[i]], [np.mean(box_data[i])],
-                     color='w', marker='*', markersize=9)#, markeredgecolor='k'
+        # if showmeans is True:
+        #     print("testing", [x_loc[i]], [np.mean(box_data[i])])
+        #     plt.plot([x_loc[i]], [np.mean(box_data[i])], 'o')
+
+            # plt.plot([x_loc[i]], [np.mean(box_data[i])],
+            #          color='firebrick', marker='*')#, markeredgecolor='k', , markersize=9
         
     if labels is not None:
         for i in range(group_num):
@@ -89,8 +119,10 @@ def boxgroup(x, labels=None, conditions=None, colors=None, notch=False, sys='',
     if conditions is not None:
         plt.xticks(cond_loc, conditions)
     
+    if labels is not None:
+        plt.legend(loc="best", scatterpoints=1, fancybox=True, ncol=group_num)
+    
+    # plt.grid(alpha=0.4)
     plt.xlim(x_loc[0]-0.7, x_loc[-1]+0.7)
-    plt.legend(loc="best", scatterpoints=1, fancybox=True, ncol=group_num)
-    plt.grid(alpha=0.4)
 
     return bp
