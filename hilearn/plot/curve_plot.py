@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def ROC_plot(state, scores, threshold=None, color=None, legend_on=True, 
-    legend_label="predict", base_line=True, linewidth=1.5, label=None):
+    legend_label="predict", base_line=False, linewidth=1.5, label=None):
     """
     Plot ROC curve and calculate the Area under the curve (AUC) from the
     prediction scores and true labels.
