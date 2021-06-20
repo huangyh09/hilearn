@@ -189,6 +189,15 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True,
     #score_gap = np.append(score_gap, np.max(score_gap)+0.1)
 
     if threshold is not None:
+        is_threshold_valid = (threshold >= np.min(score_gap) and 
+                              threshold <= np.max(score_gap))
+    else:
+        is_threshold_valid = False
+
+    if is_threshold_valid == False:
+        print("Warning for PR_curve: invalid threshold; too big or small.")
+
+    if is_threshold_valid:
         thresholds = np.sort(np.append(threshold, score_gap))
     else:
         thresholds = np.sort(score_gap)
@@ -219,14 +228,14 @@ def PR_curve(state, scores, threshold=None, color=None, legend_on=True,
                  label="%s: AUC=%.3f" %(legend_label,auc))
 
     ## Adding dot with given threshold
-    if threshold is not None:
+    if is_threshold_valid:
         idx1 = np.where(scores >= threshold)[0]
         idx2 = np.where(scores <  threshold)[0]
         FP = np.sum(state[idx1] == 0)
         TP = np.sum(state[idx1] == 1)
         FN = np.sum(state[idx2] == 1)
-        _pre = (TP+0.0)/(TP + FP)
-        _rec = (TP+0.0)/(TP + FN)
+        _pre = (TP + 0.0) / (TP + FP)
+        _rec = (TP + 0.0) / (TP + FN)
         if color is None:
             plt.plot(_rec, _pre, marker='o', markersize=8, mec='k', mfc='none')
         else:

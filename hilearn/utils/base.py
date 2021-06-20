@@ -62,3 +62,39 @@ def match(ref_ids, new_ids, uniq_ref_only=True):
     origin_idx = np.argsort(RT_idx1)
     RT_idx = np.array(RT_idx2)[origin_idx]
     return RT_idx
+
+
+def rm_none(x, rv_type=None):
+    """Remove None values and return the index with valid values.
+
+    Parameters
+    ----------
+    x : array_like, not list
+        an array of input values
+    rv_type : string or valid dtype for numpy.array
+        data type for returned values
+
+    Returns
+    -------
+    (x_no_none, idx_not_none) : the not_none values and its index
+
+    Examples
+    --------
+    >>> x1 = [5, 9, 1]
+    >>> x2 = [1, 2, 5, 7, 9]
+    >>> mm = hilearn.match(x2, x1)
+    >>> mm
+    array([2, None, 0, None, 1], dtype=object)
+    >>> rm_none(mm)
+    (array([2, 0, 1]), array([0, 2, 4]))
+    """
+    idx_not_none = (x != None) & (x == x)
+    idx_not_none = np.where(idx_not_none)[0]
+
+    x_no_none = x[idx_not_none]
+    if rv_type is not None:
+        x_no_none = x_no_none.astype(rv_type)
+    elif len(x_no_none) > 0:
+        x_no_none = x_no_none.astype(type(x_no_none[0]))
+
+    return x_no_none, idx_not_none
